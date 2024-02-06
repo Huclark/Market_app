@@ -27,13 +27,17 @@ class User(db.Model, UserMixin):
     username = db.Column(db.String(150), unique=True, nullable=False)
     email = db.Column(db.String(150), unique=True, nullable=False)
     password = db.Column(db.String(60), nullable=False)
-    budget =db.Column(db.Integer(), nullable=False, default=1000)
+    budget =db.Column(db.Integer(), nullable=False, default=20000)
     items = db.relationship('Item', backref='user', lazy=True)
     
     @property
     def formatted_budget(self):
         formatted_number = "{:,.2f}".format(self.budget)
         return f"{formatted_number}"
+    
+    def balance_sufficient(self, item):
+        return self.budget >= item.price
+        
 
 
 class Item(db.Model):
@@ -53,3 +57,12 @@ class Item(db.Model):
             str: string representation of model
         """
         return f"Item{self.id}: {self.name}"
+    
+    def format_price(self, price):
+        return "{:,.2f}".format(self.price)
+    
+class PurchaseForm(FlaskForm):
+    submit = SubmitField(label="Purchase Item!")
+    
+class SellForm(FlaskForm):
+    submit = SubmitField(label="Sell Item!")
