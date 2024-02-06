@@ -16,7 +16,7 @@ def create_app():
     # initialise the database
     db.init_app(app)
     # Import all models and blueprints
-    from .models import Item, RegisterForm, User, LoginForm
+    from .models import Item, RegisterForm, User, LoginForm, PurchaseForm, SellForm
     from .views import views
     # register all blueprints
     app.register_blueprint(views, url_prefix="/")
